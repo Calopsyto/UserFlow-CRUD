@@ -2,10 +2,11 @@ package model.entities;
 
 import java.sql.Date;
 
-public class UserEntity {
+public class User {
     private String name;
+    private String email;
+    private String birthDate;
     private Integer age;
-    private Date birthDate;
 
     public String getName() {
         return name;
@@ -13,6 +14,14 @@ public class UserEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Integer getAge() {
@@ -23,7 +32,7 @@ public class UserEntity {
         this.age = age;
     }
 
-    public Date getBirthDate() {
+    public String getBirthDate() {
         return birthDate;
     }
 
