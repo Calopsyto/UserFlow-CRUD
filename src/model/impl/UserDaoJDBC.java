@@ -2,12 +2,14 @@ package model.impl;
 
 import db.DB;
 import db.DbException;
+import db.DbIntegrityException;
 import model.dao.UserDao;
 import model.entities.User;
 
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBC implements UserDao {
@@ -74,16 +76,70 @@ public class UserDaoJDBC implements UserDao {
 
     @Override
     public void deleteById(Integer id) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "DELETE FROM User WHERE Id = ?"
+            );
 
+            preparedStatement.setInt(1, id);
+            int rowsAffected = preparedStatement.executeUpdate();
+            System.out.println("Rows Affected: " + rowsAffected);
+
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1451) {
+                throw new DbIntegrityException(e.getMessage());
+            } else {
+                throw new DbException(e.getMessage());
+            }
+        }
     }
 
     @Override
     public User findById(Integer id) {
-        return null;
+        try {
+            User user = null;
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "SELECT * FROM User WHERE Id = ?"
+            );
+            preparedStatement.setInt(1, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                 user = new User(
+                        resultSet.getString("Name"),
+                        resultSet.getString("Email"),
+                        String.valueOf(resultSet.getString("BirthDate")),
+                        resultSet.getInt("Age"));
+            }
+
+            return user;
+
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
     }
 
     @Override
     public List<User> findAll() {
-        return List.of();
+        try {
+            Statement statement = connection.createStatement();
+            List<User> userList = new ArrayList<>();
+
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM User");
+            while (resultSet.next()) {
+                User user = new User(
+                        resultSet.getString("Name"),
+                        resultSet.getString("Email"),
+                        resultSet.getString("BirthDate"),
+                        resultSet.getInt("Age"));
+                userList.add(user);
+            }
+
+            return userList;
+
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
     }
 }
