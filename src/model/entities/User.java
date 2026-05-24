@@ -8,6 +8,13 @@ public class User {
     private String birthDate;
     private Integer age;
 
+    public User(String name, String email, String birthDate, Integer age) {
+        this.name = name;
+        this.email = email;
+        this.birthDate = birthDate;
+        this.age = age;
+    }
+
     public String getName() {
         return name;
     }
