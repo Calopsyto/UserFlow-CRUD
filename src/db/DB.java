@@ -72,4 +72,13 @@ public class DB {
             throw new DbException(e.getMessage());
         }
     }
+
+    public static void rollbackTransation(Exception e) {
+        try {
+            connection.rollback();
+            throw new DbException(e.getMessage());
+        } catch (SQLException ex) {
+            throw new DbException(e.getMessage() + "Rollback Fail");
+        }
+    }
 }
