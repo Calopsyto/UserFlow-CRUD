@@ -50,7 +50,7 @@ public class UserDaoJDBC implements UserDao {
     }
 
     @Override
-    public void update(User user) {
+    public void update(User user, Integer id) {
         try {
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -62,6 +62,7 @@ public class UserDaoJDBC implements UserDao {
             preparedStatement.setString(2, user.getEmail());
             preparedStatement.setDate(3, new java.sql.Date(simpleDateFormat.parse(user.getBirthDate()).getTime()));
             preparedStatement.setInt(4, user.getAge());
+            preparedStatement.setInt(5, id);
 
             int rowsAffected = preparedStatement.executeUpdate();
             System.out.println("Rows Affected: " + rowsAffected);
@@ -83,6 +84,7 @@ public class UserDaoJDBC implements UserDao {
 
             preparedStatement.setInt(1, id);
             int rowsAffected = preparedStatement.executeUpdate();
+            connection.commit();
             System.out.println("Rows Affected: " + rowsAffected);
 
         } catch (SQLException e) {
