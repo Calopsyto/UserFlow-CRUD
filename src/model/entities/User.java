@@ -46,4 +46,9 @@ public class User {
     public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Nome: %s | Email: %s | Data de Nascimento: %s | Idade: %d\n", name, email, birthDate, age);
+    }
 }
